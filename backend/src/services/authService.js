@@ -17,5 +17,24 @@ class AuthService {
       logger.warn('Registration attempt with existing email', { email });
       throw new Error('Email already registered');
     }
-}
+
+    // Hash password
+    const passwordHash = await bcrypt.hash(password, config.bcryptRounds);
+    
+    // Create user (default role: CLIENT)
+    const user = User.create({
+      name,
+      email,
+      passwordHash,
+      role: 'CLIENT'
+    });
+    
+    logger.info('User registered successfully', { 
+      userId: user.id, 
+      email: user.email,
+      role: user.role 
+    });
+    
+    return user.toSafeObject();
+  }
 }
