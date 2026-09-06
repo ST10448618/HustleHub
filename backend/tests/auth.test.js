@@ -9,7 +9,7 @@ describe('Authentication API', () => {
         User.deleteAll();
     });
 
-    describe('POST /api/v1/auth/register', () => {
+        describe('POST /api/v1/auth/register', () => {
         it('should register a new user successfully', async () => {
             const response = await request(app)
                 .post('/api/v1/auth/register')
@@ -52,5 +52,73 @@ describe('Authentication API', () => {
             expect(response.body.message).toContain('Email already registered');
         });
 
+        it('should reject invalid email', async () => {
+            const response = await request(app)
+                .post('/api/v1/auth/register')
+                .send({
+                    name: 'Test User',
+                    email: 'invalid-email',
+                    password: 'Test123456!'
+                });
+            
+            expect(response.status).toBe(400);
+            expect(response.body.success).toBe(false);
+            expect(response.body.errors).toBeDefined();
+            expect(response.body.errors[0].field).toBe('email');
+        });
+
+        it('should reject weak password', async () => {
+            const response = await request(app)
+                .post('/api/v1/auth/register')
+                .send({
+                    name: 'Test User',
+                    email: 'test@example.com',
+                    password: 'weak'
+                });
+            
+            expect(response.status).toBe(400);
+            expect(response.body.success).toBe(false);
+            expect(response.body.errors).toBeDefined();
+            expect(response.body.errors[0].field).toBe('password');
+        });
+
+        it('should reject missing name', async () => {
+            const response = await request(app)
+                .post('/api/v1/auth/register')
+                .send({
+                    email: 'test@example.com',
+                    password: 'Test123456!'
+                });
+            
+            expect(response.status).toBe(400);
+            expect(response.body.success).toBe(false);
+            expect(response.body.errors[0].field).toBe('name');
+        });
+
+        it('should reject missing email', async () => {
+            const response = await request(app)
+                .post('/api/v1/auth/register')
+                .send({
+                    name: 'Test User',
+                    password: 'Test123456!'
+                });
+            
+            expect(response.status).toBe(400);
+            expect(response.body.success).toBe(false);
+            expect(response.body.errors[0].field).toBe('email');
+        });
+
+        it('should reject missing password', async () => {
+            const response = await request(app)
+                .post('/api/v1/auth/register')
+                .send({
+                    name: 'Test User',
+                    email: 'test@example.com'
+                });
+            
+            expect(response.status).toBe(400);
+            expect(response.body.success).toBe(false);
+            expect(response.body.errors[0].field).toBe('password');
+        });
     });
 });
