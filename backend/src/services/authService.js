@@ -37,4 +37,23 @@ class AuthService {
     
     return user.toSafeObject();
   }
+
+    /**
+   * Login user and generate JWT
+   */
+  static async login(email, password) {
+    // Find user by email
+    const user = User.findByEmail(email);
+    if (!user) {
+      logger.warn('Login attempt with non-existent email', { email });
+      throw new Error('Invalid email or password');
+    }
+    
+    // Verify password
+    const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
+    if (!isPasswordValid) {
+      logger.warn('Login attempt with invalid password', { email });
+      throw new Error('Invalid email or password');
+    }
+}
 }
