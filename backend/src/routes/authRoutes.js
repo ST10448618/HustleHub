@@ -22,3 +22,12 @@ router.post(
   handleValidationErrors,
   AuthController.login
 );
+
+
+router.get(
+  '/me',
+  authenticate,
+  AuthController.getMe
+);
+
+module.exports = router;
