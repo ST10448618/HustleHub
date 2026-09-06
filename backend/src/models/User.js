@@ -10,4 +10,16 @@ class User {
     this.createdAt = new Date();
     this.updatedAt = new Date();
   }
+
+    static create(userData) {
+    const user = new User(userData);
+    config.tempStorage.users.push(user);
+    return user;
+  }
+
+  static findByEmail(email) {
+    return config.tempStorage.users.find(
+      u => u.email === email.toLowerCase().trim()
+    );
+  }
 }
