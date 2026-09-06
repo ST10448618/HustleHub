@@ -39,6 +39,14 @@ describe('Admin Routes API', () => {
             });
         clientToken = clientLogin.body.data.token;
 
+         // Login as admin
+        const adminLogin = await request(app)
+            .post('/api/v1/auth/login')
+            .send({
+                email: 'admin@example.com',
+                password: 'AdminPass123!'
+            });
+        adminToken = adminLogin.body.data.token;
 
     });
 });
