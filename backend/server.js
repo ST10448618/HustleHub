@@ -35,3 +35,22 @@ try {
   server = http.createServer(app);
   console.log('HTTP server running (no SSL)');
 }
+
+// Start server
+server.listen(PORT, () => {
+  const protocol = server instanceof https.Server ? 'https' : 'http';
+  console.log('='.repeat(60));
+  console.log('HUSTLEHUB+ API SERVER');
+  console.log('='.repeat(60));
+  console.log(`Server running at: ${protocol}://localhost:${PORT}`);
+  console.log(`Environment: ${config.nodeEnv}`);
+  console.log(`Health check: ${protocol}://localhost:${PORT}/health`);
+  console.log('='.repeat(60));
+  console.log('Available endpoints:');
+  console.log('  POST   /api/v1/auth/register  - Register new user');
+  console.log('  POST   /api/v1/auth/login     - Login user');
+  console.log('  GET    /api/v1/auth/me        - Get current user (Protected)');
+  console.log('  GET    /api/v1/admin/users    - List all users (Admin only)');
+  console.log('  GET    /health                - Health check');
+  console.log('='.repeat(60));
+});
