@@ -22,4 +22,13 @@ class User {
       u => u.email === email.toLowerCase().trim()
     );
   }
+
+    static findById(id) {
+    return config.tempStorage.users.find(u => u.id === id);
+  }
+
+  static findAll() {
+    return [...config.tempStorage.users];
+  }
+
 }
