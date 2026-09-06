@@ -39,7 +39,7 @@ describe('Admin Routes API', () => {
             });
         clientToken = clientLogin.body.data.token;
 
-         // Login as admin
+        // Login as admin
         const adminLogin = await request(app)
             .post('/api/v1/auth/login')
             .send({
@@ -57,6 +57,65 @@ describe('Admin Routes API', () => {
             expect(response.status).toBe(401);
             expect(response.body.success).toBe(false);
             expect(response.body.message).toContain('Authentication required');
+        });
+
+        it('should return 401 if invalid token provided', async () => {
+            const response = await request(app)
+                .get('/api/v1/admin/users')
+                .set('Authorization', 'Bearer invalid.token.here');
+            
+            expect(response.status).toBe(401);
+            expect(response.body.success).toBe(false);
+            expect(response.body.message).toContain('Invalid token');
+        });
+
+        it('should return 403 for CLIENT role (unauthorized)', async () => {
+            const response = await request(app)
+                .get('/api/v1/admin/users')
+                .set('Authorization', `Bearer ${clientToken}`);
+            
+            expect(response.status).toBe(403);
+            expect(response.body.success).toBe(false);
+            expect(response.body.message).toContain('Insufficient permissions');
+        });
+
+        it('should return 200 for ADMIN role (authorized)', async () => {
+            const response = await request(app)
+                .get('/api/v1/admin/users')
+                .set('Authorization', `Bearer ${adminToken}`);
+            
+            expect(response.status).toBe(200);
+            expect(response.body.success).toBe(true);
+            expect(response.body.data).toBeInstanceOf(Array);
+            
+            // Should not contain password hashes
+            if (response.body.data.length > 0) {
+                expect(response.body.data[0]).not.toHaveProperty('passwordHash');
+            }
+        });
+
+        it('should return all users for admin', async () => {
+            const response = await request(app)
+                .get('/api/v1/admin/users')
+                .set('Authorization', `Bearer ${adminToken}`);
+            
+            expect(response.body.data.length).toBeGreaterThanOrEqual(2);
+            
+            // Check both users exist
+            const emails = response.body.data.map(u => u.email);
+            expect(emails).toContain('client@example.com');
+            expect(emails).toContain('admin@example.com');
+        });
+
+        it('should not return password hashes in user list', async () => {
+            const response = await request(app)
+                .get('/api/v1/admin/users')
+                .set('Authorization', `Bearer ${adminToken}`);
+            
+            response.body.data.forEach(user => {
+                expect(user).not.toHaveProperty('passwordHash');
+                expect(user).not.toHaveProperty('password');
+            });
         });
     });
 });
