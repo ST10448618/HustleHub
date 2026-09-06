@@ -53,6 +53,51 @@ class AuthController {
   }//REGISTER ENDS
 
   
+  static async login(req, res, next) {
+    try {
+      const { email, password } = req.body;
+
+      
+      const result = await AuthService.login(email, password);
+
+      
+      logger.info('User login successful', {
+        userId: result.user.id,
+        email: result.user.email,
+        role: result.user.role
+      });//
+
+      
+      return res.status(200).json({
+        success: true,
+        message: 'Login successful',
+        data: {
+          token: result.token,
+          user: result.user
+        }
+
+      });//
+
+    }//TRY ENDS
+
+     catch (error) 
+     {
+      if (error.message === 'Invalid email or password') {
+        return res.status(401).json({
+          success: false,
+          message: 'Invalid email or password'
+        });
+
+      }//IF ENDS
+
+      
+      next(error);
+
+    }//CATCH ENDS
+
+
+  }//LOGIN ENDS
+
 
 
 
