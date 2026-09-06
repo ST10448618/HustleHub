@@ -40,4 +40,29 @@ const validateLogin = [
 
 ];//validate login ends
 
+//error handling
 
+const handleValidationErrors = (req, res, next) => {
+  const errors = validationResult(req);
+  
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      success: false,
+      message: 'Validation failed',
+      errors: errors.array().map(err => ({
+        field: err.path,
+        message: err.msg
+      }))
+    });
+
+  }//if ends
+  
+  next();
+
+};//validation error handler ends
+
+module.exports = {
+  validateRegister,
+  validateLogin,
+  handleValidationErrors
+};
