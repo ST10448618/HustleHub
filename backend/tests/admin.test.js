@@ -47,6 +47,16 @@ describe('Admin Routes API', () => {
                 password: 'AdminPass123!'
             });
         adminToken = adminLogin.body.data.token;
+    });
 
+    describe('GET /api/v1/admin/users', () => {
+        it('should return 401 if no token provided', async () => {
+            const response = await request(app)
+                .get('/api/v1/admin/users');
+            
+            expect(response.status).toBe(401);
+            expect(response.body.success).toBe(false);
+            expect(response.body.message).toContain('Authentication required');
+        });
     });
 });
