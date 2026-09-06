@@ -11,49 +11,41 @@ const errorHandler = (err, req, res, next) => {
     userId: req.user?.id,
     body: req.body
   });
-
-    
+  
+  // Default error response
   let statusCode = err.statusCode || 500;
   let message = err.message || 'Internal server error';
   
-  
+  // Special handling for known error types
   if (err.name === 'ValidationError') {
     statusCode = 400;
     message = err.message;
-
-  }//if ends
+  }
   
   if (err.name === 'CastError') {
     statusCode = 400;
     message = 'Invalid ID format';
-
-  }//if ends
+  }
   
-  
+  // Don't expose stack traces in production
   const response = {
     success: false,
     message: statusCode === 500 && process.env.NODE_ENV === 'production' 
       ? 'An unexpected error occurred' 
       : message
-  };//response ends
-
+  };
   
+  // Add validation details if available
   if (err.errors) {
     response.errors = err.errors;
-
-  }//if ends
-
-
+  }
   
-  
+  // Add stack trace in development only
   if (process.env.NODE_ENV === 'development' && err.stack) {
     response.stack = err.stack;
-
-  }//if ends
+  }
   
   res.status(statusCode).json(response);
-
-};//error handler ends
-
+};
 
 module.exports = { errorHandler };
