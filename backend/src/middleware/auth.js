@@ -51,4 +51,41 @@ const authenticate = (req, res, next) => {
         message: 'User associated with this token no longer exists.'
       });
     }
-}
+
+        // Attach user to request
+    req.user = user;
+    req.token = token;
+    req.userId = user.id;
+    req.userRole = user.role;
+    
+    logger.debug('Authenticated request', {
+      userId: user.id,
+      role: user.role,
+      path: req.path,
+      method: req.method
+    });
+    
+    next();
+  } catch (error) {
+    let message = 'Authentication failed';
+    let status = 401;
+    
+    if (error.message === 'Token expired') {
+      message = 'Session expired. Please login again.';
+    } else if (error.message === 'Invalid token') {
+      message = 'Invalid token. Please login again.';
+    }
+    
+    logger.warn('Authentication failed', {
+      error: error.message,
+      path: req.path,
+      ip: req.ip
+    });
+    
+    return res.status(status).json({
+      success: false,
+      message
+    });
+  }
+};
+
