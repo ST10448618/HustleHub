@@ -20,3 +20,14 @@ if (users.length === 0) {
 }
 
 console.log('\n' + '='.repeat(40));
+
+// Check specifically for admin
+const admin = users.find(u => u.email === 'admin@example.com');
+
+if (admin) {
+    console.log('\n✅ Admin user found:');
+    console.log(`   Role: ${admin.role}`);
+    console.log(`   PasswordHash: ${admin.passwordHash ? '✅ Set' : '❌ MISSING'}`);
+} else {
+    console.log('\n❌ Admin user NOT found!');
+}
