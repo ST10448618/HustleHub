@@ -36,3 +36,24 @@ const errorHandler = (err, req, res, next) => {
       ? 'An unexpected error occurred' 
       : message
   };//response ends
+
+  
+  if (err.errors) {
+    response.errors = err.errors;
+
+  }//if ends
+
+
+  
+  
+  if (process.env.NODE_ENV === 'development' && err.stack) {
+    response.stack = err.stack;
+
+  }//if ends
+  
+  res.status(statusCode).json(response);
+
+};//error handler ends
+
+
+module.exports = { errorHandler };
