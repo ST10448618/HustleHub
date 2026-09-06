@@ -21,4 +21,11 @@ async function createAdmin() {
         passwordHash: passwordHash,
         role: 'ADMIN'
     });
+    
+    console.log('Admin user created successfully!');
+    console.log('Admin details:');
+    console.log(JSON.stringify(admin.toSafeObject(), null, 2));
 }
+
+// Run the script
+createAdmin();
