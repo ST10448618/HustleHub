@@ -77,6 +77,23 @@ class AuthService {
       token,
       user: user.toSafeObject()
     };
+}
 
+     /**
+   * Verify JWT token
+   */
+  static verifyToken(token) {
+    try {
+      const decoded = jwt.verify(token, config.jwtSecret);
+      return decoded;
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        throw new Error('Token expired');
+      }
+      if (error.name === 'JsonWebTokenError') {
+        throw new Error('Invalid token');
+      }
+      throw error;
+    }
 }
 }
