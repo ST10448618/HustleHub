@@ -20,7 +20,8 @@ const authenticate = (req, res, next) => {
       });
     }
   }
-      // Check Bearer scheme
+      
+  // Check Bearer scheme
     const parts = authHeader.split(' ');
     if (parts.length !== 2 || parts[0] !== 'Bearer') {
       logger.warn('Invalid Authorization header format', {
@@ -34,4 +35,20 @@ const authenticate = (req, res, next) => {
     }
     
     const token = parts[1];
+
+        // Verify token
+    const decoded = AuthService.verifyToken(token);
+    
+    // Get user from storage
+    const user = AuthService.getUserById(decoded.userId);
+    if (!user) {
+      logger.warn('Valid token but user not found', {
+        userId: decoded.userId,
+        path: req.path
+      });
+      return res.status(401).json({
+        success: false,
+        message: 'User associated with this token no longer exists.'
+      });
+    }
 }
