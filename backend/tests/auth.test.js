@@ -239,5 +239,32 @@ describe('Authentication API', () => {
             expect(response.body.data).not.toHaveProperty('passwordHash');
         });
 
+        it('should reject request without token', async () => {
+            const response = await request(app)
+                .get('/api/v1/auth/me');
+            
+            expect(response.status).toBe(401);
+            expect(response.body.success).toBe(false);
+            expect(response.body.message).toContain('Authentication required');
+        });
+
+        it('should reject invalid token', async () => {
+            const response = await request(app)
+                .get('/api/v1/auth/me')
+                .set('Authorization', 'Bearer invalid.token.here');
+            
+            expect(response.status).toBe(401);
+            expect(response.body.success).toBe(false);
+            expect(response.body.message).toContain('Invalid token');
+        });
+
+        it('should reject malformed Authorization header', async () => {
+            const response = await request(app)
+                .get('/api/v1/auth/me')
+                .set('Authorization', 'InvalidFormat');
+            
+            expect(response.status).toBe(401);
+            expect(response.body.success).toBe(false);
+        });
     });
 });
