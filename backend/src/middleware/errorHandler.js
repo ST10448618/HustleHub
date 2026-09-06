@@ -12,4 +12,27 @@ const errorHandler = (err, req, res, next) => {
     body: req.body
   });
 
+    
+  let statusCode = err.statusCode || 500;
+  let message = err.message || 'Internal server error';
   
+  
+  if (err.name === 'ValidationError') {
+    statusCode = 400;
+    message = err.message;
+
+  }//if ends
+  
+  if (err.name === 'CastError') {
+    statusCode = 400;
+    message = 'Invalid ID format';
+
+  }//if ends
+  
+  
+  const response = {
+    success: false,
+    message: statusCode === 500 && process.env.NODE_ENV === 'production' 
+      ? 'An unexpected error occurred' 
+      : message
+  };//response ends
