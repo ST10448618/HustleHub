@@ -14,5 +14,9 @@ if (users.length === 0) {
         console.log(`  Name: ${user.name}`);
         console.log(`  Email: ${user.email}`);
         console.log(`  Role: ${user.role}`);
+        console.log(`  PasswordHash exists: ${user.passwordHash ? '✅ YES' : '❌ NO'}`);
+        console.log(`  PasswordHash preview: ${user.passwordHash ? user.passwordHash.substring(0, 30) + '...' : 'NONE'}`);
     });
 }
+
+console.log('\n' + '='.repeat(40));
