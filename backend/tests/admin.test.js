@@ -21,5 +21,14 @@ describe('Admin Routes API', () => {
             role: 'CLIENT'
         });
 
+        // Create ADMIN user
+        const adminHash = await bcrypt.hash('AdminPass123!', 10);
+        User.create({
+            name: 'Admin User',
+            email: 'admin@example.com',
+            passwordHash: adminHash,
+            role: 'ADMIN'
+        });
+
     });
 });
