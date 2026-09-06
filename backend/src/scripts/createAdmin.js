@@ -10,4 +10,7 @@ async function createAdmin() {
         console.log('Admin already exists:', existing.toSafeObject());
         return;
     }
+    
+    // Hash password
+    const passwordHash = await bcrypt.hash('AdminPass123!', 10);
 }
