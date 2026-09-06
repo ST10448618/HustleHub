@@ -69,3 +69,31 @@ app.use((req, res, next) => {
 });
 
 
+// API ROUTES
+
+
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'HustleHub+ API is running',
+    environment: config.nodeEnv
+  });
+
+});
+
+
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1', userRoutes);
+
+
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `Route ${req.method} ${req.path} not found`
+  });
+
+});
+
+
+
+
