@@ -99,9 +99,31 @@ class AuthController {
   }//LOGIN ENDS
 
 
+  static async getMe(req, res, next) {
+    try {
+      
+      return res.status(200).json({
+        success: true,
+        data: req.user
+      });
+
+    } //try ends
+
+    catch (error)
+    {
+      next(error)
+
+    }//catch ends
 
 
+  }// getME ends
 
 
 
 }//class ends
+
+module.exports = AuthController;
+
+
+
+
