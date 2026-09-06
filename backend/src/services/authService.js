@@ -96,4 +96,15 @@ class AuthService {
       throw error;
     }
 }
+
+  /**
+   * Get user by ID (used by middleware)
+   */
+  static getUserById(id) {
+    const user = User.findById(id);
+    if (!user) return null;
+    return user.toSafeObject();
+  }
 }
+
+module.exports = AuthService;
