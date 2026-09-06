@@ -47,6 +47,30 @@
 
 --- 
 
+## Quick Start
+
+### Prerequisites
+- [Node.js](https://nodejs.org/) (v14 or higher)
+- [MongoDB Atlas](https://www.mongodb.com/atlas) account
+
+### Installation
+
+ **Clone and install dependencies**
+   ```bash
+   git clone <your-repository-url>
+   cd hustlehub-plus
+
+   # Backend
+   cd backend
+   npm install
+   npm install --save-dev nodemon
+
+   # Frontend (in a new terminal)
+   cd ../frontend
+   npm install
+  ```
+
+---
 ## 1. System Overview
 
 HustleHub+ is a secure freelance marketplace platform that connects clients with freelancers. Freelancers can advertise their services through gigs, while clients can browse available services and create bookings. The platform also records simulated financial transactions generated from bookings and provides freelancers with information about income and estimated tax obligations. (MongoDB, 2023)
