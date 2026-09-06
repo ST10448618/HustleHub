@@ -95,5 +95,12 @@ app.use((req, res) => {
 });
 
 
+// ERROR HANDLING
+
+app.use(errorHandler);
+
+module.exports = app;
+
+
 
 
