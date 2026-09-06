@@ -52,3 +52,20 @@ app.use('/api/v1/auth', limiter);
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+
+// LOGGING MIDDLEWARE
+
+app.use((req, res, next) => {
+  logger.debug('Incoming request', {
+    method: req.method,
+    path: req.path,
+    ip: req.ip,
+    userAgent: req.get('user-agent')
+  });
+
+  next();
+
+});
+
+
