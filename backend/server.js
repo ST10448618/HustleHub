@@ -53,4 +53,42 @@ server.listen(PORT, () => {
   console.log('  GET    /api/v1/admin/users    - List all users (Admin only)');
   console.log('  GET    /health                - Health check');
   console.log('='.repeat(60));
+
+    // ============================================
+  // CREATE DEFAULT ADMIN USER IF NONE EXISTS
+  // ============================================
+  const User = require('./src/models/User');
+  const bcrypt = require('bcrypt');
+  
+  const existingUsers = User.findAll();
+  if (existingUsers.length === 0) {
+    console.log('\n  No users found. Creating default admin...');
+    
+    bcrypt.hash('AdminPass123!', 10, (err, hash) => {
+      if (err) {
+        console.error('  Failed to hash password:', err.message);
+        return;
+      }
+      
+      const admin = User.create({
+        name: 'Admin User',
+        email: 'admin@example.com',
+        passwordHash: hash,
+        role: 'ADMIN'
+      });
+      
+      console.log('  Default admin created successfully!');
+      console.log('   Email: admin@example.com');
+      console.log('   Password: AdminPass123!');
+      console.log('   Role: ADMIN');
+      console.log('   ID: ' + admin.id);
+    });
+  } else {
+    console.log(`\n  Users already exist: ${existingUsers.length}`);
+    const admin = User.findByEmail('admin@example.com');
+    if (admin) {
+      console.log(`   Admin exists: ${admin.email} (${admin.role})`);
+    }
+  }
+  // ============================================
 });
