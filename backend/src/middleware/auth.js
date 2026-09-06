@@ -19,9 +19,8 @@ const authenticate = (req, res, next) => {
         message: 'Authentication required. Please provide a valid JWT token.'
       });
     }
-  }
-      
-  // Check Bearer scheme
+    
+    // Check Bearer scheme
     const parts = authHeader.split(' ');
     if (parts.length !== 2 || parts[0] !== 'Bearer') {
       logger.warn('Invalid Authorization header format', {
@@ -35,8 +34,8 @@ const authenticate = (req, res, next) => {
     }
     
     const token = parts[1];
-
-        // Verify token
+    
+    // Verify token
     const decoded = AuthService.verifyToken(token);
     
     // Get user from storage
@@ -51,8 +50,8 @@ const authenticate = (req, res, next) => {
         message: 'User associated with this token no longer exists.'
       });
     }
-
-        // Attach user to request
+    
+    // Attach user to request
     req.user = user;
     req.token = token;
     req.userId = user.id;
@@ -89,3 +88,38 @@ const authenticate = (req, res, next) => {
   }
 };
 
+/**
+ * Role-based authorization middleware
+ * @param {...string} roles - Allowed roles
+ */
+const authorize = (...roles) => {
+  return (req, res, next) => {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Authentication required'
+      });
+    }
+    
+    if (!roles.includes(req.user.role)) {
+      logger.warn('Authorization failed - insufficient role', {
+        userId: req.user.id,
+        role: req.user.role,
+        requiredRoles: roles,
+        path: req.path
+      });
+      
+      return res.status(403).json({
+        success: false,
+        message: 'Insufficient permissions. This action requires one of these roles: ' + roles.join(', ')
+      });
+    }
+    
+    next();
+  };
+};
+
+module.exports = {
+  authenticate,
+  authorize
+};
