@@ -55,5 +55,28 @@ class AuthService {
       logger.warn('Login attempt with invalid password', { email });
       throw new Error('Invalid email or password');
     }
+
+        // Generate JWT
+    const token = jwt.sign(
+      { 
+        userId: user.id, 
+        email: user.email, 
+        role: user.role 
+      },
+      config.jwtSecret,
+      { expiresIn: config.jwtExpire }
+    );
+    
+    logger.info('User logged in successfully', { 
+      userId: user.id, 
+      email: user.email,
+      role: user.role 
+    });
+    
+    return {
+      token,
+      user: user.toSafeObject()
+    };
+
 }
 }
