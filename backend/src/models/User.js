@@ -31,4 +31,21 @@ class User {
     return [...config.tempStorage.users];
   }
 
+    static deleteAll() {
+    config.tempStorage.users = [];
+    config.tempStorage.nextId = 1;
+  }
+
+  toSafeObject() {
+    return {
+      id: this.id,
+      name: this.name,
+      email: this.email,
+      role: this.role,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt
+    };
+  }
 }
+
+module.exports = User;
