@@ -5,3 +5,8 @@ const User = require('../src/models/User');
 beforeEach(() => {
     User.deleteAll();
 });
+
+// Global teardown
+afterAll(() => {
+    // Clean up if needed
+});
