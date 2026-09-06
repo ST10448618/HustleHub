@@ -7,3 +7,18 @@ const {
   handleValidationErrors 
 } = require('../validation/authValidation');
 const { authenticate } = require('../middleware/auth');
+
+
+router.post(
+  '/register',
+  validateRegister,
+  handleValidationErrors,
+  AuthController.register
+);
+
+router.post(
+  '/login',
+  validateLogin,
+  handleValidationErrors,
+  AuthController.login
+);
