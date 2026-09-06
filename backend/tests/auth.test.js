@@ -151,6 +151,55 @@ describe('Authentication API', () => {
                 expect(response.body.data.user).not.toHaveProperty('passwordHash');
             });
 
+            it('should reject invalid password', async () => {
+                const response = await request(app)
+                    .post('/api/v1/auth/login')
+                    .send({
+                        email: 'test@example.com',
+                        password: 'WrongPassword123!'
+                    });
+
+                expect(response.status).toBe(401);
+                expect(response.body.success).toBe(false);
+                expect(response.body.message).toBe('Invalid email or password');
+            });
+
+            it('should reject non-existent email', async () => {
+                const response = await request(app)
+                    .post('/api/v1/auth/login')
+                    .send({
+                        email: 'nonexistent@example.com',
+                        password: 'Test123456!'
+                    });
+
+                expect(response.status).toBe(401);
+                expect(response.body.success).toBe(false);
+                expect(response.body.message).toBe('Invalid email or password');
+            });
+
+            it('should reject missing email', async () => {
+                const response = await request(app)
+                    .post('/api/v1/auth/login')
+                    .send({
+                        password: 'Test123456!'
+                    });
+
+                expect(response.status).toBe(400);
+                expect(response.body.success).toBe(false);
+                expect(response.body.errors[0].field).toBe('email');
+            });
+
+            it('should reject missing password', async () => {
+                const response = await request(app)
+                    .post('/api/v1/auth/login')
+                    .send({
+                        email: 'test@example.com'
+                    });
+
+                expect(response.status).toBe(400);
+                expect(response.body.success).toBe(false);
+                expect(response.body.errors[0].field).toBe('password');
+            });
         });
 
     });
