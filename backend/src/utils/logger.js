@@ -1,3 +1,7 @@
+/**
+ * Simple logger utility for Part 1
+ * In Part 3 this will be replaced with structured logging
+ */
 const logger = {
   info: (message, meta = {}) => {
     console.log(JSON.stringify({

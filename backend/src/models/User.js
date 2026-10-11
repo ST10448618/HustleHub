@@ -1,51 +1,76 @@
-const config = require('../config');
+const mongoose = require('mongoose');
 
-class User {
-  constructor({ name, email, passwordHash, role = 'CLIENT' }) {
-    this.id = config.tempStorage.nextId++;
-    this.name = name;
-    this.email = email.toLowerCase().trim();
-    this.passwordHash = passwordHash;
-    this.role = role;
-    this.createdAt = new Date();
-    this.updatedAt = new Date();
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'Name is required'],
+      trim: true
+    },
+    email: {
+      type: String,
+      required: [true, 'Email is required'],
+      unique: true,
+      lowercase: true,
+      trim: true
+    },
+    passwordHash: {
+      type: String,
+      required: true
+    },
+    role: {
+      type: String,
+      enum: ['CLIENT', 'FREELANCER', 'ADMIN'],
+      default: 'CLIENT'
+    }
+  },
+  {
+    timestamps: true
   }
+);
 
-    static create(userData) {
-    const user = new User(userData);
-    config.tempStorage.users.push(user);
-    return user;
+/**
+ * Find a user by email, normalising the same way registration/login do.
+ */
+userSchema.statics.findByEmail = function findByEmail(email) {
+  return this.findOne({ email: email.toLowerCase().trim() });
+};
+
+userSchema.statics.findByIdSafe = function findByIdSafe(id) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return Promise.resolve(null);
   }
+  return this.findOne({ _id: id });
+};
 
-  static findByEmail(email) {
-    return config.tempStorage.users.find(
-      u => u.email === email.toLowerCase().trim()
-    );
-  }
+/**
+ * Returns every user. Used by the admin "list users" endpoint.
+ */
+userSchema.statics.findAllUsers = function findAllUsers() {
+  return this.find({});
+};
 
-    static findById(id) {
-    return config.tempStorage.users.find(u => u.id === id);
-  }
+/**
+ * Deletes every user. Used only by the automated test suite to reset
+ * state between tests.
+ */
+userSchema.statics.deleteAllUsers = function deleteAllUsers() {
+  return this.deleteMany({});
+};
 
-  static findAll() {
-    return [...config.tempStorage.users];
-  }
+/**
+ * Returns a plain object safe to send to the client: never includes
+ * passwordHash, and exposes only the fields the frontend needs.
+ */
+userSchema.methods.toSafeObject = function toSafeObject() {
+  return {
+    id: this.id,
+    name: this.name,
+    email: this.email,
+    role: this.role,
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt
+  };
+};
 
-    static deleteAll() {
-    config.tempStorage.users = [];
-    config.tempStorage.nextId = 1;
-  }
-
-  toSafeObject() {
-    return {
-      id: this.id,
-      name: this.name,
-      email: this.email,
-      role: this.role,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt
-    };
-  }
-}
-
-module.exports = User;
+module.exports = mongoose.model('User', userSchema);

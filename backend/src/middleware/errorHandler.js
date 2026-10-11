@@ -1,5 +1,23 @@
 const logger = require('../utils/logger');
 
+// Fields that must never appear in logs, even internally.
+const SENSITIVE_BODY_FIELDS = ['password', 'passwordHash', 'confirmPassword', 'token'];
+
+function redactBody(body) {
+  if (!body || typeof body !== 'object') {
+    return body;
+  }
+
+  const redacted = { ...body };
+  SENSITIVE_BODY_FIELDS.forEach((field) => {
+    if (field in redacted) {
+      redacted[field] = '[REDACTED]';
+    }
+  });
+
+  return redacted;
+}
+
 const errorHandler = (err, req, res, next) => {
   // Log the error
   logger.error('Error occurred', {
@@ -9,7 +27,7 @@ const errorHandler = (err, req, res, next) => {
     method: req.method,
     ip: req.ip,
     userId: req.user?.id,
-    body: req.body
+    body: redactBody(req.body)
   });
   
   // Default error response
