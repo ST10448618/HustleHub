@@ -42,8 +42,4 @@ async function createAdmin() {
   process.exit(0);
 }
 
-createAdmin().catch(async (err) => {
-  console.error('Failed to create admin:', err.message);
-  await disconnectDB();
-  process.exit(1);
-});
+createAdmin();
