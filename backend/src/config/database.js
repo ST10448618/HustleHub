@@ -2,6 +2,20 @@ const mongoose = require('mongoose');
 const config = require('./index');
 const logger = require('../utils/logger');
 
+/**
+ * Connects to MongoDB using the connection string from config.
+ *
+ * This is called once, explicitly, from server.js when the real
+ * application boots. It is deliberately NOT called from app.js,
+ * so that requiring app.js (as our Jest/Supertest tests do) never
+ * triggers a real network connection to MongoDB.
+ *
+ * If the connection fails, this is treated as fatal: the app cannot
+ * do anything useful without its database, so we log a clear error
+ * and exit rather than starting a server that would fail on every
+ * request.
+ */
+
 const FALLBACK_DNS_SERVERS = ['8.8.8.8', '8.8.4.4', '1.1.1.1'];
 
 async function connectDB() {

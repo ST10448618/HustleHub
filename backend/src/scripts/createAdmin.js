@@ -3,6 +3,21 @@ const config = require('../config');
 const User = require('../models/User');
 const { connectDB, disconnectDB } = require('../config/database');
 
+/**
+ * Controlled admin creation script.
+ *
+ * Run with: npm run create-admin
+ *
+ * Credentials come from ADMIN_NAME, ADMIN_EMAIL and ADMIN_PASSWORD in
+ * your .env file - never hardcoded in source. Normal public registration
+ * (POST /api/v1/auth/register) can never create an ADMIN account; this
+ * script is the only deliberate way to create one.
+ *
+ * As of Phase B3, this creates a real, persistent admin user in your
+ * MongoDB Atlas database - it connects to the same database your
+ * running server uses, so the admin account it creates is immediately
+ * usable for login against "npm run dev".
+ */
 async function createAdmin() {
   const name = process.env.ADMIN_NAME;
   const email = process.env.ADMIN_EMAIL;
@@ -42,4 +57,8 @@ async function createAdmin() {
   process.exit(0);
 }
 
-createAdmin();
+createAdmin().catch(async (err) => {
+  console.error('Failed to create admin:', err.message);
+  await disconnectDB();
+  process.exit(1);
+});
