@@ -63,12 +63,26 @@ const gigSchema = new mongoose.Schema(
   }
 );
 
+/**
+ * The "deposit cannot exceed price" rule is enforced here, at the
+ * schema level, rather than only in request validation. This matters
+ * because an update might change only price or only depositAmount -
+ * this hook runs against the fully-merged document on every save(),
+ * so it correctly catches an update that would create an invalid
+ * combination even when only one of the two fields was sent.
+ */
 gigSchema.pre('validate', function enforceDepositNotAbovePrice() {
   if (this.depositAmount > this.price) {
     this.invalidate('depositAmount', 'Deposit amount cannot be greater than the price');
   }
 });
 
+/**
+ * Returns a plain object safe to send to the client. If freelancerId
+ * has been populated (see gigService.js), a small public "freelancer"
+ * object (id + name only - never email) is included for the frontend
+ * to display on marketplace cards and gig detail pages.
+ */
 gigSchema.methods.toSafeObject = function toSafeObject() {
   const isPopulated = this.freelancerId && this.freelancerId.name !== undefined;
 

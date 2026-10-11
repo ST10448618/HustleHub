@@ -4,7 +4,6 @@ const app = require('../src/app');
 
 describe('Health Check API', () => {
     describe('GET /health', () => {
-
         it('should return 200 OK with health status', async () => {
             const response = await request(app)
                 .get('/health');

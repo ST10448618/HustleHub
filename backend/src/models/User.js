@@ -1,5 +1,18 @@
 const mongoose = require('mongoose');
 
+/**
+ * User schema
+ *
+ * Replaces the temporary in-memory User storage used in Part 1 with a
+ * real, persistent MongoDB collection via Mongoose.
+ *
+ * Mongoose automatically provides:
+ *  - _id            (the real primary key, an ObjectId)
+ *  - id             (a virtual getter that returns _id as a string -
+ *                    this is why user.id continues to work unchanged
+ *                    everywhere in the codebase after this migration)
+ *  - createdAt/updatedAt (via the timestamps option below)
+ */
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -36,6 +49,13 @@ userSchema.statics.findByEmail = function findByEmail(email) {
   return this.findOne({ email: email.toLowerCase().trim() });
 };
 
+/**
+ * Find a user by id, safely. Mongoose's built-in findById throws a
+ * CastError for a string that isn't a valid ObjectId (e.g. a token
+ * left over from before this migration, or a tampered value). We
+ * treat "not a valid id" the same as "not found" rather than letting
+ * that turn into an unexpected 500 error.
+ */
 userSchema.statics.findByIdSafe = function findByIdSafe(id) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return Promise.resolve(null);
