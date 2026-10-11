@@ -1,10 +1,7 @@
 const AuthService = require('../services/authService');
 const logger = require('../utils/logger');
 
-/**
- * JWT Authentication Middleware
- */
-const authenticate = (req, res, next) => {
+const authenticate = async (req, res, next) => {
   try {
     // Get token from Authorization header
     const authHeader = req.headers.authorization;
@@ -38,11 +35,11 @@ const authenticate = (req, res, next) => {
     // Verify token
     const decoded = AuthService.verifyToken(token);
     
-    // Get user from storage
-    const user = AuthService.getUserById(decoded.userId);
+    // Get user from the database
+    const user = await AuthService.getUserById(decoded.id);
     if (!user) {
       logger.warn('Valid token but user not found', {
-        userId: decoded.userId,
+        userId: decoded.id,
         path: req.path
       });
       return res.status(401).json({
@@ -66,6 +63,7 @@ const authenticate = (req, res, next) => {
     
     next();
   } catch (error) {
+    // Token verification failed
     let message = 'Authentication failed';
     let status = 401;
     
@@ -88,12 +86,41 @@ const authenticate = (req, res, next) => {
   }
 };
 
+const optionalAuthenticate = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return next();
+  }
+
+  const parts = authHeader.split(' ');
+  if (parts.length !== 2 || parts[0] !== 'Bearer') {
+    return next();
+  }
+
+  try {
+    const decoded = AuthService.verifyToken(parts[1]);
+    const user = await AuthService.getUserById(decoded.id);
+    if (user) {
+      req.user = user;
+      req.token = parts[1];
+      req.userId = user.id;
+      req.userRole = user.role;
+    }
+  } catch (error) {
+    // Any failure here just means "treat this request as anonymous" -
+    // it is not an error condition for an optionally-authenticated route.
+  }
+
+  next();
+};
+
 /**
  * Role-based authorization middleware
  * @param {...string} roles - Allowed roles
  */
 const authorize = (...roles) => {
   return (req, res, next) => {
+    // Ensure user is authenticated first
     if (!req.user) {
       return res.status(401).json({
         success: false,
@@ -101,6 +128,7 @@ const authorize = (...roles) => {
       });
     }
     
+    // Check if user role is allowed
     if (!roles.includes(req.user.role)) {
       logger.warn('Authorization failed - insufficient role', {
         userId: req.user.id,
@@ -121,5 +149,6 @@ const authorize = (...roles) => {
 
 module.exports = {
   authenticate,
+  optionalAuthenticate,
   authorize
 };
