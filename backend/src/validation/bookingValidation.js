@@ -2,7 +2,7 @@ const { body, param } = require('express-validator');
 
 function startOfToday() {
   const now = new Date();
-  now.setHours(0, 0, 0, 0);
+  now.setUTCHours(0, 0, 0, 0);
   return now;
 }
 
