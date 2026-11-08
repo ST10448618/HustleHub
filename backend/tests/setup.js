@@ -1,12 +1,33 @@
 // backend/tests/setup.js
-const User = require('../src/models/User');
+const mongoose = require('mongoose');
+const { MongoMemoryServer } = require('mongodb-memory-server');
 
-// Clear users before each test
-beforeEach(() => {
-    User.deleteAll();
-});
+let mongoServer;
 
-// Global teardown
-afterAll(() => {
-    // Clean up if needed
-});
+async function connectTestDB() {
+  mongoServer = await MongoMemoryServer.create();
+  const uri = mongoServer.getUri();
+  await mongoose.connect(uri);
+}
+
+async function clearTestDB() {
+  const { collections } = mongoose.connection;
+  const promises = Object.values(collections).map((collection) =>
+    collection.deleteMany({})
+  );
+  await Promise.all(promises);
+}
+
+async function closeTestDB() {
+  // readyState 0 means "never connected" - guard against trying to
+  // close/drop a connection that was never actually established.
+  if (mongoose.connection.readyState !== 0) {
+    await mongoose.connection.dropDatabase();
+    await mongoose.connection.close();
+  }
+  if (mongoServer) {
+    await mongoServer.stop();
+  }
+}
+
+module.exports = { connectTestDB, clearTestDB, closeTestDB };

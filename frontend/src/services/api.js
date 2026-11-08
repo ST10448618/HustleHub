@@ -1,10 +1,5 @@
 import axios from 'axios';
 
-/**
- * The single localStorage key used for the JWT, everywhere. Exported
- * so authService and AuthContext (Phase 3) read/write the exact same
- * key rather than each hardcoding their own string.
- */
 export const TOKEN_STORAGE_KEY = 'hustlehub_token';
 
 export const SESSION_EXPIRED_EVENT = 'hustlehub:session-expired';
@@ -24,11 +19,13 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
     const status = error.response?.status ?? null;
     const envelope = error.response?.data;
+
     const requestUrl = error.config?.url || '';
     const isAuthEndpoint =
       requestUrl.includes('/auth/login') || requestUrl.includes('/auth/register');

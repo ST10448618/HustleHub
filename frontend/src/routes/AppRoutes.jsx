@@ -36,7 +36,21 @@ import SessionExpired from '../pages/public/SessionExpired.jsx';
 import Forbidden from '../pages/Forbidden.jsx';
 import NotFound from '../pages/NotFound.jsx';
 
-
+/**
+ * The whole route table (build reference section 7), in one file.
+ *
+ * Three layers, outermost first, for every authenticated screen:
+ *   ProtectedRoute  -> is anyone logged in, and is their role allowed?
+ *   AppShell        -> the Sidebar + Topbar frame
+ *   <the page>      -> rendered in the shell's content area
+ * So a page only ever renders after the auth/role check has passed.
+ *
+ * Screens a later phase builds are mounted as <PagePlaceholder> at
+ * their final route. That phase swaps in the real page; the route
+ * itself never changes.
+ *
+ * Unknown URLs redirect to /404, per the build reference.
+ */
 function AppRoutes() {
   const location = useLocation();
 
