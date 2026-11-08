@@ -27,4 +27,9 @@ describe('revokeSession', () => {
     expect(axios.post).not.toHaveBeenCalled();
   });
 
+  it('never throws, even when the server is unreachable', async () => {
+    axios.post.mockRejectedValue(new Error('Network Error'));
+
+    await expect(revokeSession('tok123')).resolves.toBeUndefined();
+  });
 });
