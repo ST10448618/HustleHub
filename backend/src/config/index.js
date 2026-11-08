@@ -1,5 +1,8 @@
 const dotenv = require('dotenv');
 
+//Get started with JSON web tokens. (n.d.). Auth0. Retrieved October 12, 2026, 
+// from https://auth0.com/learn/json-web-tokens
+
 // Load environment variables
 dotenv.config();
 
@@ -45,6 +48,8 @@ module.exports = {
 
   // Security
   bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS, 10) || 10,
+  maxFailedLogins: parseInt(process.env.MAX_FAILED_LOGINS, 10) || 5,
+  lockoutMinutes: parseInt(process.env.LOCKOUT_MINUTES, 10) || 15,
 
   // Rate limiting
   rateLimitWindow: 15 * 60 * 1000, // 15 minutes
