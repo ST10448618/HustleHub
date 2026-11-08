@@ -2,9 +2,15 @@ import { createContext, startTransition, useCallback, useEffect, useState } from
 import { useNavigate } from 'react-router-dom';
 import * as authService from '../services/authService';
 import { TOKEN_STORAGE_KEY, SESSION_EXPIRED_EVENT } from '../services/api';
+import { revokeSession } from '../services/sessionService';
 
 const AuthContext = createContext(undefined);
 export { AuthContext };
+
+export function AuthProvider({ children }) {
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(() => Boolean(localStorage.getItem(TOKEN_STORAGE_KEY)));
+  const navigate = useNavigate();
 
 /**
  * AuthProvider - the Context + Provider pattern.
@@ -110,6 +116,7 @@ export function AuthProvider({ children }) {
   );
 
   const logout = useCallback(() => {
+    revokeSession(localStorage.getItem(TOKEN_STORAGE_KEY));
     localStorage.removeItem(TOKEN_STORAGE_KEY);
     setCurrentUser(null);
     navigate('/login', { replace: true });
