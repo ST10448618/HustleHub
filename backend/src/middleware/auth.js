@@ -34,6 +34,22 @@ const authenticate = async (req, res, next) => {
     
     // Verify token
     const decoded = AuthService.verifyToken(token);
+
+    // A correctly signed token can still be refused if the user logged
+    // out: its unique id is on the revocation list.
+    if (await AuthService.isTokenRevoked(decoded.jti)) {
+      logger.warn('Revoked token presented', {
+        event: 'AUTH_FAILED',
+        reason: 'token_revoked',
+        userId: decoded.id,
+        path: req.path,
+        ip: req.ip
+      });
+      return res.status(401).json({
+        success: false,
+        message: 'This session has ended. Please login again.'
+      });
+    }
     
     // Get user from the database
     const user = await AuthService.getUserById(decoded.id);
@@ -74,6 +90,7 @@ const authenticate = async (req, res, next) => {
     }
     
     logger.warn('Authentication failed', {
+      event: 'AUTH_FAILED',
       error: error.message,
       path: req.path,
       ip: req.ip
@@ -99,6 +116,12 @@ const optionalAuthenticate = async (req, res, next) => {
 
   try {
     const decoded = AuthService.verifyToken(parts[1]);
+
+    // A logged-out token is treated as anonymous, like any invalid one.
+    if (await AuthService.isTokenRevoked(decoded.jti)) {
+      return next();
+    }
+
     const user = await AuthService.getUserById(decoded.id);
     if (user) {
       req.user = user;
@@ -131,6 +154,7 @@ const authorize = (...roles) => {
     // Check if user role is allowed
     if (!roles.includes(req.user.role)) {
       logger.warn('Authorization failed - insufficient role', {
+        event: 'ACCESS_DENIED',
         userId: req.user.id,
         role: req.user.role,
         requiredRoles: roles,
