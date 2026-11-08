@@ -21,6 +21,15 @@
                   "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.be.true; });"
                 ]
               }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set(\"runId\", Date.now().toString(36));"
+                ]
+              }
             }
           ],
           "request": {
@@ -65,7 +74,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Alex Freelancer\",\n  \"email\": \"alex.freelancer@hustlehub.test\",\n  \"password\": \"Test123456!\",\n  \"role\": \"FREELANCER\"\n}",
+              "raw": "{\n  \"name\": \"Alex Freelancer\",\n  \"email\": \"alex.freelancer.{{runId}}@hustlehub.test\",\n  \"password\": \"Test123456!\",\n  \"role\": \"FREELANCER\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -110,7 +119,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Sam OtherFreelancer\",\n  \"email\": \"sam.freelancer@hustlehub.test\",\n  \"password\": \"Test123456!\",\n  \"role\": \"FREELANCER\"\n}",
+              "raw": "{\n  \"name\": \"Sam OtherFreelancer\",\n  \"email\": \"sam.freelancer.{{runId}}@hustlehub.test\",\n  \"password\": \"Test123456!\",\n  \"role\": \"FREELANCER\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -154,7 +163,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Casey Client\",\n  \"email\": \"casey.client@hustlehub.test\",\n  \"password\": \"Test123456!\",\n  \"role\": \"CLIENT\"\n}",
+              "raw": "{\n  \"name\": \"Casey Client\",\n  \"email\": \"casey.client.{{runId}}@hustlehub.test\",\n  \"password\": \"Test123456!\",\n  \"role\": \"CLIENT\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -199,7 +208,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Jordan OtherClient\",\n  \"email\": \"jordan.client@hustlehub.test\",\n  \"password\": \"Test123456!\",\n  \"role\": \"CLIENT\"\n}",
+              "raw": "{\n  \"name\": \"Jordan OtherClient\",\n  \"email\": \"jordan.client.{{runId}}@hustlehub.test\",\n  \"password\": \"Test123456!\",\n  \"role\": \"CLIENT\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -243,7 +252,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Duplicate Attempt\",\n  \"email\": \"alex.freelancer@hustlehub.test\",\n  \"password\": \"Test123456!\"\n}",
+              "raw": "{\n  \"name\": \"Duplicate Attempt\",\n  \"email\": \"alex.freelancer.{{runId}}@hustlehub.test\",\n  \"password\": \"Test123456!\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -331,7 +340,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Weak Password\",\n  \"email\": \"weakpw@hustlehub.test\",\n  \"password\": \"weak\"\n}",
+              "raw": "{\n  \"name\": \"Weak Password\",\n  \"email\": \"weakpw.{{runId}}@hustlehub.test\",\n  \"password\": \"weak\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -375,7 +384,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"noname@hustlehub.test\",\n  \"password\": \"Test123456!\"\n}",
+              "raw": "{\n  \"email\": \"noname.{{runId}}@hustlehub.test\",\n  \"password\": \"Test123456!\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -419,7 +428,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Sneaky\",\n  \"email\": \"sneaky@hustlehub.test\",\n  \"password\": \"Test123456!\",\n  \"role\": \"ADMIN\"\n}",
+              "raw": "{\n  \"name\": \"Sneaky\",\n  \"email\": \"sneaky.{{runId}}@hustlehub.test\",\n  \"password\": \"Test123456!\",\n  \"role\": \"ADMIN\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -463,7 +472,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"alex.freelancer@hustlehub.test\",\n  \"password\": \"Test123456!\"\n}",
+              "raw": "{\n  \"email\": \"alex.freelancer.{{runId}}@hustlehub.test\",\n  \"password\": \"Test123456!\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -508,7 +517,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"sam.freelancer@hustlehub.test\",\n  \"password\": \"Test123456!\"\n}",
+              "raw": "{\n  \"email\": \"sam.freelancer.{{runId}}@hustlehub.test\",\n  \"password\": \"Test123456!\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -553,7 +562,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"casey.client@hustlehub.test\",\n  \"password\": \"Test123456!\"\n}",
+              "raw": "{\n  \"email\": \"casey.client.{{runId}}@hustlehub.test\",\n  \"password\": \"Test123456!\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -598,7 +607,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"jordan.client@hustlehub.test\",\n  \"password\": \"Test123456!\"\n}",
+              "raw": "{\n  \"email\": \"jordan.client.{{runId}}@hustlehub.test\",\n  \"password\": \"Test123456!\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -643,7 +652,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"casey.client@hustlehub.test\",\n  \"password\": \"WrongPassword1!\"\n}",
+              "raw": "{\n  \"email\": \"casey.client.{{runId}}@hustlehub.test\",\n  \"password\": \"WrongPassword1!\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -687,7 +696,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"nobody@hustlehub.test\",\n  \"password\": \"Test123456!\"\n}",
+              "raw": "{\n  \"email\": \"nobody.{{runId}}@hustlehub.test\",\n  \"password\": \"Test123456!\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -731,7 +740,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"casey.client@hustlehub.test\"\n}",
+              "raw": "{\n  \"email\": \"casey.client.{{runId}}@hustlehub.test\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -2784,6 +2793,110 @@
               }
             }
           ]
+        },
+        {
+          "name": "Get My Tax Estimate (Freelancer)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{freelancerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/income/tax",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "income",
+                "tax"
+              ]
+            },
+            "description": "Estimated income tax for the current SA tax year, calculated from the freelancer's PAID transactions."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.be.true; });",
+                  "pm.test(\"estimatedTax is a non-negative number\", function () { const d = pm.response.json().data; pm.expect(d.estimatedTax).to.be.a(\"number\"); pm.expect(d.estimatedTax).to.be.at.least(0); });",
+                  "pm.test(\"after-tax income = taxable income - tax\", function () { const d = pm.response.json().data; pm.expect(d.afterTaxIncome).to.eql(d.taxableIncome - d.estimatedTax); });",
+                  "pm.test(\"includes tax year, breakdown and disclaimer\", function () { const d = pm.response.json().data; pm.expect(d.taxYear).to.match(/^\\d{4}\\/\\d{2}$/); pm.expect(d.breakdown).to.be.an(\"array\"); pm.expect(d.disclaimer).to.be.a(\"string\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get My Tax Estimate - As CLIENT (rejected)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{clientToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/income/tax",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "income",
+                "tax"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 403\", function () { pm.response.to.have.status(403); });",
+                  "pm.test(\"success is false\", function () { pm.expect(pm.response.json().success).to.be.false; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get My Tax Estimate - No Auth (rejected)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/income/tax",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "income",
+                "tax"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 401\", function () { pm.response.to.have.status(401); });",
+                  "pm.test(\"success is false\", function () { pm.expect(pm.response.json().success).to.be.false; });"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
@@ -2867,7 +2980,7 @@
                   "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
                   "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.be.true; });",
                   "pm.test(\"does not expose passwordHash\", function () { pm.expect(JSON.stringify(pm.response.json().data.users)).to.not.include(\"passwordHash\"); });",
-                  "pm.test(\"finds our test client\", function () { const emails = pm.response.json().data.users.map(u => u.email); pm.expect(emails).to.include(\"jordan.client@hustlehub.test\"); });"
+                  "pm.test(\"finds our test client\", function () { const emails = pm.response.json().data.users.map(u => u.email); pm.expect(emails).to.include(\"jordan.client.\" + pm.collectionVariables.get(\"runId\") + \"@hustlehub.test\"); });"
                 ]
               }
             }
@@ -3055,7 +3168,7 @@
                 "exec": [
                   "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
                   "const users = pm.response.json().data.users;",
-                  "const jordan = users.find(u => u.email === \"jordan.client@hustlehub.test\");",
+                  "const jordan = users.find(u => u.email === \"jordan.client.\" + pm.collectionVariables.get(\"runId\") + \"@hustlehub.test\");",
                   "pm.collectionVariables.set(\"client2Id\", jordan.id);"
                 ]
               }
@@ -3343,6 +3456,513 @@
                 "exec": [
                   "pm.test(\"Status code is 403\", function () { pm.response.to.have.status(403); });",
                   "pm.test(\"success is false\", function () { pm.expect(pm.response.json().success).to.be.false; });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Security Features",
+      "description": "Demonstrates the two extra security features: account lockout after repeated failed logins, and token revocation on logout.",
+      "item": [
+        {
+          "name": "Register - Lockout Test User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Lockout Tester\",\n  \"email\": \"lockout.{{runId}}@hustlehub.test\",\n  \"password\": \"Test123456!\",\n  \"role\": \"CLIENT\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login - Wrong Password (attempt 1 of 5)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"lockout.{{runId}}@hustlehub.test\",\n  \"password\": \"WrongPassword1!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 401\", function () { pm.response.to.have.status(401); });",
+                  "pm.test(\"success is false\", function () { pm.expect(pm.response.json().success).to.be.false; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login - Wrong Password (attempt 2 of 5)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"lockout.{{runId}}@hustlehub.test\",\n  \"password\": \"WrongPassword1!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 401\", function () { pm.response.to.have.status(401); });",
+                  "pm.test(\"success is false\", function () { pm.expect(pm.response.json().success).to.be.false; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login - Wrong Password (attempt 3 of 5)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"lockout.{{runId}}@hustlehub.test\",\n  \"password\": \"WrongPassword1!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 401\", function () { pm.response.to.have.status(401); });",
+                  "pm.test(\"success is false\", function () { pm.expect(pm.response.json().success).to.be.false; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login - Wrong Password (attempt 4 of 5)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"lockout.{{runId}}@hustlehub.test\",\n  \"password\": \"WrongPassword1!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 401\", function () { pm.response.to.have.status(401); });",
+                  "pm.test(\"success is false\", function () { pm.expect(pm.response.json().success).to.be.false; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login - Wrong Password (attempt 5 of 5)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"lockout.{{runId}}@hustlehub.test\",\n  \"password\": \"WrongPassword1!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 401\", function () { pm.response.to.have.status(401); });",
+                  "pm.test(\"success is false\", function () { pm.expect(pm.response.json().success).to.be.false; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login - Correct Password While Locked (rejected)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"lockout.{{runId}}@hustlehub.test\",\n  \"password\": \"Test123456!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Five consecutive failures lock the account. Even the CORRECT password is refused with 423 until the lock expires."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 423\", function () { pm.response.to.have.status(423); });",
+                  "pm.test(\"success is false\", function () { pm.expect(pm.response.json().success).to.be.false; });",
+                  "pm.test(\"message says the account is locked\", function () { pm.expect(pm.response.json().message).to.match(/locked/i); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register - Logout Test User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Session Tester\",\n  \"email\": \"session.{{runId}}@hustlehub.test\",\n  \"password\": \"Test123456!\",\n  \"role\": \"CLIENT\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login - Logout Test User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"session.{{runId}}@hustlehub.test\",\n  \"password\": \"Test123456!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.collectionVariables.set(\"logoutToken\", pm.response.json().data.token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Current User - Before Logout",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{logoutToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Logout (revokes the token)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{logoutToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Current User - After Logout (revoked token rejected)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{logoutToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            },
+            "description": "The token is still correctly signed and unexpired, but its id is on the revocation list."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 401\", function () { pm.response.to.have.status(401); });",
+                  "pm.test(\"message says the session has ended\", function () { pm.expect(pm.response.json().message).to.match(/session has ended/i); });"
                 ]
               }
             }
