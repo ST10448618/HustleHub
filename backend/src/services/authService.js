@@ -180,6 +180,7 @@ class AuthService {
     }
   }
 
+
   /**
    * Verify JWT token
    */

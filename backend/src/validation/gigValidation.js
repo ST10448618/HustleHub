@@ -35,6 +35,14 @@ const validateCreateGig = [
     })
 ];
 
+/**
+ * Validation for updating a gig. Every field is optional (a client
+ * may send just one changed field), but whatever IS sent must still
+ * be valid. Note: the deposit-vs-price cross-check for partial
+ * updates is handled at the schema level (see models/Gig.js), since
+ * that is the only place that reliably knows both the incoming and
+ * currently-stored values together.
+ */
 const validateUpdateGig = [
   body('title')
     .optional()
@@ -62,10 +70,27 @@ const validateUpdateGig = [
     .isFloat({ min: 0 }).withMessage('Deposit amount cannot be negative')
 ];
 
+/**
+ * Validates that :id in the URL is a well-formed MongoDB id, before
+ * it ever reaches a database query. This is what protects
+ * Gig.findById() from ever being called with a malformed string.
+ */
 const validateGigIdParam = [
   param('id').isMongoId().withMessage('Invalid gig id')
 ];
 
+/**
+ * Validates the ?category= query parameter on GET /gigs.
+ *
+ * Security note: without this, a request like
+ * GET /gigs?category[$ne]=null gets parsed by Express's query parser
+ * into req.query.category = { $ne: null } - an OBJECT, not a string.
+ * If that object were passed straight into a Mongoose query filter
+ * unchecked, it becomes a live MongoDB query operator - a classic
+ * NoSQL injection pattern. isString() rejects any non-string value
+ * (including that kind of bracket-notation object) with a clean 400
+ * before it ever reaches the database layer.
+ */
 const validateListGigsQuery = [
   query('category')
     .optional()

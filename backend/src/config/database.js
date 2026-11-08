@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 const config = require('./index');
 const logger = require('../utils/logger');
 
+//MongoDB. (2024). MongoDB documentation. Https://Github.Com/Mongodb/Docs-Bi-Connector/Blob/DOCSP-3279/Source/Index.Txt
+// https://www.mongodb.com/docs/
+
 const FALLBACK_DNS_SERVERS = ['8.8.8.8', '8.8.4.4', '1.1.1.1'];
 
 async function connectDB() {

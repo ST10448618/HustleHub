@@ -8,6 +8,7 @@ class TransactionService {
 
   static async createDepositTransaction(booking) {
     const transaction = await Transaction.create({
+    return Transaction.create({
       bookingId: booking._id,
       clientId: booking.clientId,
       freelancerId: booking.freelancerId,
@@ -21,6 +22,10 @@ class TransactionService {
 
   static async createRemainderTransaction(booking) {
     const transaction = await Transaction.create({
+  }
+
+  static async createRemainderTransaction(booking) {
+    return Transaction.create({
       bookingId: booking._id,
       clientId: booking.clientId,
       freelancerId: booking.freelancerId,

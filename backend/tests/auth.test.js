@@ -1,12 +1,19 @@
 // backend/tests/auth.test.js
 const request = require('supertest');
 const app = require('../src/app');
-const User = require('../src/models/User');
+const { connectTestDB, clearTestDB, closeTestDB } = require('./setup');
 
 describe('Authentication API', () => {
-    // Clean up before each test
-    beforeEach(() => {
-        User.deleteAll();
+    beforeAll(async () => {
+        await connectTestDB();
+    });
+
+    afterEach(async () => {
+        await clearTestDB();
+    });
+
+    afterAll(async () => {
+        await closeTestDB();
     });
 
     describe('POST /api/v1/auth/register', () => {
@@ -119,6 +126,47 @@ describe('Authentication API', () => {
             expect(response.status).toBe(400);
             expect(response.body.success).toBe(false);
             expect(response.body.errors[0].field).toBe('password');
+        });
+
+        it('should allow registering as FREELANCER', async () => {
+            const response = await request(app)
+                .post('/api/v1/auth/register')
+                .send({
+                    name: 'Freelancer User',
+                    email: 'freelancer@example.com',
+                    password: 'Test123456!',
+                    role: 'FREELANCER'
+                });
+
+            expect(response.status).toBe(201);
+            expect(response.body.data).toHaveProperty('role', 'FREELANCER');
+        });
+
+        it('should default to CLIENT when no role is provided', async () => {
+            const response = await request(app)
+                .post('/api/v1/auth/register')
+                .send({
+                    name: 'Default Role User',
+                    email: 'defaultrole@example.com',
+                    password: 'Test123456!'
+                });
+
+            expect(response.status).toBe(201);
+            expect(response.body.data).toHaveProperty('role', 'CLIENT');
+        });
+
+        it('should reject an attempt to self-register as ADMIN', async () => {
+            const response = await request(app)
+                .post('/api/v1/auth/register')
+                .send({
+                    name: 'Sneaky User',
+                    email: 'sneaky@example.com',
+                    password: 'Test123456!',
+                    role: 'ADMIN'
+                });
+
+            expect(response.status).toBe(400);
+            expect(response.body.success).toBe(false);
         });
     });
 
