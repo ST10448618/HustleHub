@@ -80,8 +80,6 @@
 
 </div>
 
-> 💡 Screenshots live in [`/images`](images). Filenames use underscores (no spaces) so they render reliably on GitHub.
-
 ---
 
 <a id="highlights"></a>
