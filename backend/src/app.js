@@ -59,31 +59,6 @@ if (process.env.NODE_ENV !== 'test') {
 // Body parsing with size limits.
 app.use(express.json({ limit: '100kb' }));
 app.use(express.urlencoded({ extended: true, limit: '100kb' }));
-// Rate limiting.
-// unrelated test failures.
-if (process.env.NODE_ENV !== 'test') {
-  app.use(generalLimiter);
-  app.use('/api/v1/auth', authLimiter);
-}
-
-// Body parsing with size limits.
-app.use(express.json({ limit: '100kb' }));
-app.use(express.urlencoded({ extended: true, limit: '100kb' }));
-
-// ====================
-// LOGGING MIDDLEWARE
-// ====================
-
-// Request logging
-app.use((req, res, next) => {
-  logger.debug('Incoming request', {
-    method: req.method,
-    path: req.path,
-    ip: req.ip,
-    userAgent: req.get('user-agent')
-  });
-  next();
-});
 
 // ====================
 // API ROUTES

@@ -132,7 +132,6 @@ class BookingService {
       bookingId: booking.id,
       cancelledBy: user.id
     });
-    logger.info('Booking cancelled', { bookingId: booking.id, cancelledBy: user.id });
 
     return booking.toSafeObject();
   }
@@ -190,7 +189,6 @@ class BookingService {
       bookingId: booking.id,
       completedBy: user.id
     });
-    logger.info('Booking completed', { bookingId: booking.id, completedBy: user.id });
 
     return booking.toSafeObject();
   }

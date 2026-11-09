@@ -1,18 +1,5 @@
 const mongoose = require('mongoose');
 
-/**
- * User schema
- *
- * Replaces the temporary in-memory User storage used in Part 1 with a
- * real, persistent MongoDB collection via Mongoose.
- *
- * Mongoose automatically provides:
- *  - _id            (the real primary key, an ObjectId)
- *  - id             (a virtual getter that returns _id as a string -
- *                    this is why user.id continues to work unchanged
- *                    everywhere in the codebase after this migration)
- *  - createdAt/updatedAt (via the timestamps option below)
- */
 const userSchema = new mongoose.Schema(
   {
     name: {
